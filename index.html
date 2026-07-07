@@ -186,3 +186,16 @@ background:#18a558;
 </div>
 
 </section>
+</body><input type="file" id="thumbnailUpload" accept="image/*">
+
+<img id="preview" width="300">
+
+<script>
+const upload = document.getElementById("thumbnailUpload");
+const preview = document.getElementById("preview");
+
+upload.onchange = function(){
+  const file = upload.files[0];
+  preview.src = URL.createObjectURL(file);
+}
+</script>
