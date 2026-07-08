@@ -1,10 +1,34 @@
-<!doctype html><html><body>
-<h2>Thumbnail Upload</h2>
-<input type=file id=f><button onclick="up()">Upload</button><p id=o></p>
-<script>
-async function up(){
-const file=document.getElementById('f').files[0];
-if(!file){alert('Choose file');return;}
-document.getElementById('o').textContent='Frontend ready. Complete Netlify auth function required.';
-}
-</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thumbnail Upload</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://unpkg.com/imagekit-javascript/dist/imagekit.min.js"></script>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Thumbnail Upload</h1>
+
+<input type="file" id="file">
+
+<button onclick="uploadImage()">Upload</button>
+
+<p id="status"></p>
+
+<input type="text" id="url" readonly>
+
+<button onclick="copyUrl()">Copy URL</button>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
