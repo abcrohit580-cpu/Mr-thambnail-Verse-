@@ -4,53 +4,87 @@ const imagekit = new ImageKit({
   authenticationEndpoint: "/.netlify/functions/auth"
 });
 
+const fileInput = document.getElementById("file");
+const uploadBtn = document.querySelector("button");
+const status = document.getElementById("status");
+const urlBox = document.getElementById("url");
+const preview = document.getElementById("preview");
+
 async function uploadImage() {
 
-  const fileInput = document.getElementById("file");
-  const file = fileInput.files[0];
+    const file = fileInput.files[0];
 
-  if (!file) {
-    alert("Please select a file.");
-    return;
-  }
+    if (!file) {
+        status.innerHTML = "⚠ Please select an image.";
+        return;
+    }
 
-  document.getElementById("status").innerHTML = "Uploading...";
+    if (!file.type.startsWith("image/")) {
+        status.innerHTML = "❌ Only image files are allowed.";
+        return;
+    }
 
-  try {
+    if (file.size > 10 * 1024 * 1024) {
+        status.innerHTML = "❌ Max file size is 10MB.";
+        return;
+    }
 
-    const auth = await fetch("/.netlify/functions/auth").then(res => res.json());
+    uploadBtn.disabled = true;
+    uploadBtn.innerHTML = "Uploading...";
+    status.innerHTML = "⏳ Uploading image...";
 
-    imagekit.upload({
-      file: file,
-      fileName: file.name,
-      token: auth.token,
-      expire: auth.expire,
-      signature: auth.signature
-    }, function(error, result) {
+    try {
 
-      if (error) {
-        console.log(error);
-        document.getElementById("status").innerHTML = "Upload Failed!";
-      } else {
-        document.getElementById("status").innerHTML = "Upload Successful!";
-        document.getElementById("url").value = result.url;
-      }
+        const auth = await fetch("/.netlify/functions/auth");
+        const authData = await auth.json();
 
-    });
+        imagekit.upload({
+            file: file,
+            fileName: Date.now() + "_" + file.name,
+            token: authData.token,
+            signature: authData.signature,
+            expire: authData.expire
+        }, (error, result) => {
 
-  } catch (e) {
-    console.log(e);
-    document.getElementById("status").innerHTML = "Something went wrong!";
-  }
+            uploadBtn.disabled = false;
+            uploadBtn.innerHTML = "Upload";
+
+            if (error) {
+                console.error(error);
+                status.innerHTML = "❌ Upload Failed!";
+                return;
+            }
+
+            status.innerHTML = "✅ Upload Successful!";
+
+            urlBox.value = result.url;
+
+            preview.src = result.url;
+            preview.style.display = "block";
+
+        });
+
+    } catch (err) {
+
+        console.error(err);
+
+        uploadBtn.disabled = false;
+        uploadBtn.innerHTML = "Upload";
+
+        status.innerHTML = "❌ Server Error.";
+
+    }
 
 }
 
 function copyUrl() {
 
-  const url = document.getElementById("url");
-
-  url.select();
-  document.execCommand("copy");
-
-  alert("Image URL Copied!");
+    if (urlBox.value === "") {
+        alert("No URL Found!");
+        return;
     }
+
+    navigator.clipboard.writeText(urlBox.value);
+
+    status.innerHTML = "📋 URL Copied!";
+        }
