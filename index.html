@@ -3,27 +3,109 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thumbnail Upload</title>
+
+<title>MR Thumbnail Verse</title>
 
 <link rel="stylesheet" href="style.css">
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <script src="https://unpkg.com/imagekit-javascript/dist/imagekit.min.js"></script>
+
 </head>
 
 <body>
 
+<div class="background"></div>
+
 <div class="container">
 
-<h1>Thumbnail Upload</h1>
+<div class="logo">
+<h1>🚀 MR Thumbnail Verse</h1>
+<p>Upload • Store • Share Images Instantly</p>
+</div>
 
-<input type="file" id="file">
+<div class="upload-box">
 
-<button onclick="uploadImage()">Upload</button>
+<input type="file" id="file" accept="image/*">
+
+<button id="uploadBtn" onclick="uploadImage()">
+📤 Upload Image
+</button>
+
+<div id="progressBox">
+
+<div id="progressBar"></div>
+
+</div>
 
 <p id="status"></p>
 
-<input type="text" id="url" readonly>
+<div class="preview-box">
 
-<img id="preview" style="display:none;width:100%;margin-top:15px;border-radius:10px;">
+<img id="preview" src="" alt="Preview">
 
-<button onclick="copyUrl()">Copy URL</button>
+</div>
+
+<label>Image URL</label>
+
+<input
+type="text"
+id="url"
+readonly
+placeholder="Image URL will appear here">
+
+<div class="button-group">
+
+<button onclick="copyUrl()">
+📋 Copy URL
+</button>
+
+<button onclick="openImage()">
+🌍 Open Image
+</button>
+
+<button onclick="downloadImage()">
+⬇ Download
+</button>
+
+</div>
+
+<div class="details">
+
+<p>
+📄 File :
+<span id="fileName">
+No File
+</span>
+</p>
+
+<p>
+📦 Size :
+<span id="fileSize">
+0 MB
+</span>
+</p>
+
+<p>
+🕒 Upload Time :
+<span id="uploadTime">
+--
+</span>
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div id="toast"></div>
+
+<script src="script.js"></script>
+
+</body>
+  </html>
